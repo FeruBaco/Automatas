@@ -79,6 +79,12 @@ namespace Proyecto2_Automatas
             //Set initial State
             statesClasification[initialState] = 1;
         }
+
+        private void GenerateAFD_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private string[] stateOrder(int lng)
         {
             string[] fakeArray = new string[lng];
