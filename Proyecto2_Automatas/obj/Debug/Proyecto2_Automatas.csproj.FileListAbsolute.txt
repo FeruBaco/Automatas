@@ -1,0 +1,14 @@
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\bin\Debug\Proyecto2_Automatas.exe.config
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\bin\Debug\Proyecto2_Automatas.exe
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\bin\Debug\Proyecto2_Automatas.pdb
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas.csprojAssemblyReference.cache
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\MainWindow.g.cs
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\App.g.cs
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas_MarkupCompile.cache
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas_MarkupCompile.lref
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\MainWindow.baml
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas.g.resources
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas.Properties.Resources.resources
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas.csproj.GenerateResource.cache
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas.exe
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto2_Automatas\obj\Debug\Proyecto2_Automatas.pdb

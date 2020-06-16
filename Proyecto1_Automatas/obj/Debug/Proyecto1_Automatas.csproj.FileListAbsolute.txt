@@ -1,0 +1,9 @@
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\bin\Debug\Proyecto1_Automatas.exe.config
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\bin\Debug\Proyecto1_Automatas.exe
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\bin\Debug\Proyecto1_Automatas.pdb
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\obj\Debug\Proyecto1_Automatas.csprojAssemblyReference.cache
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\obj\Debug\Proyecto1_Automatas.Form1.resources
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\obj\Debug\Proyecto1_Automatas.Properties.Resources.resources
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\obj\Debug\Proyecto1_Automatas.csproj.GenerateResource.cache
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\obj\Debug\Proyecto1_Automatas.exe
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Proyecto1_Automatas\obj\Debug\Proyecto1_Automatas.pdb

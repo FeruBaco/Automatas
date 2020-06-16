@@ -1,0 +1,6 @@
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Autmatas\bin\Debug\Autmatas.exe.config
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Autmatas\bin\Debug\Autmatas.exe
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Autmatas\bin\Debug\Autmatas.pdb
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Autmatas\obj\Debug\Cerradura_Kleene.csprojAssemblyReference.cache
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Autmatas\obj\Debug\Autmatas.exe
+C:\Users\f1nan\Desktop\Automatas\Autmatas\Autmatas\obj\Debug\Autmatas.pdb
