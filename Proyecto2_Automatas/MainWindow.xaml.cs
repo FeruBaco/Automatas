@@ -26,8 +26,10 @@ namespace Proyecto2_Automatas
         public string[] alphabet, state, finalState;
         public string initialState;
         Dictionary<string, int> statesClasification;
-
-        DataTable initTable;
+        Dictionary<string, Dictionary<string, string[]>> primaryStateTransitions;
+        DataTable initTable, finalTable;
+        Queue<NewStateHelper> createdStates;
+        Queue<string> qInitialStates;
 
         public MainWindow()
         {
@@ -40,7 +42,6 @@ namespace Proyecto2_Automatas
             InitializeHeaders();
             GenerateGrid();
         }
-
         private void InitializeHeaders()
         {
             int x = 0;
@@ -108,6 +109,8 @@ namespace Proyecto2_Automatas
         private void GenerateGrid()
         {
             initTable = new DataTable();
+            createdStates = new Queue<NewStateHelper>();
+            qInitialStates = new Queue<string>();
             initTable.Columns.Add("Estado", typeof(string));
             int i = 0;
             while (i < alphabet.Length)
@@ -120,6 +123,7 @@ namespace Proyecto2_Automatas
             while (i < state.Length)
             {
                 DataRow tableRow;
+                qInitialStates.Enqueue(state[i]);
                 tableRow = initTable.NewRow();
                 switch (statesClasification[state[i]])
                 {
@@ -145,5 +149,106 @@ namespace Proyecto2_Automatas
 
             InitialDataGrid.ItemsSource = initTable.DefaultView;
         }
+        private void GenerateAfd_Click(object sender, RoutedEventArgs e)
+        {
+            InitAfd();
+        }
+
+        private void InitAfd()
+        {
+            primaryStateTransitions = new Dictionary<string, Dictionary<string, string[]>>();
+            for (int i = 0; i < state.Length; i++)
+            {
+                Dictionary<string, string[]> tempDictionaryTransitions = new Dictionary<string, string[]>();
+                primaryStateTransitions.Add(state[i], tempDictionaryTransitions);
+                for (int j = 0; j < alphabet.Length; j++)
+                {
+                    string tempStr = initTable.Rows[i].Field<string>(j + 1);
+                    if (tempStr == null)
+                    {
+                        tempStr = "-";
+                    }
+                    string[] tempStrSplit = tempStr.Split(',');
+                    string[] tempTransitions = new string[tempStrSplit.Length];
+                    for (int k = 0; k < tempStrSplit.Length; k++)
+                    {
+                        tempTransitions[k] = tempStrSplit[k].Trim();
+                    }
+                    primaryStateTransitions[state[i]].Add(alphabet[j], tempTransitions);
+                }
+            }
+            Queue<NewStateHelper> qPendingStates = new Queue<NewStateHelper>();
+            foreach (string stateName in qInitialStates)
+            {
+                foreach (string alphabetElement in alphabet)
+                {
+                    if (primaryStateTransitions[stateName][alphabetElement].Length > 1)
+                    {
+                        NewStateHelper newStateHelper = new NewStateHelper();
+                        newStateHelper.Name = String.Join("", primaryStateTransitions[stateName][alphabetElement]);
+                        newStateHelper.baseStates = primaryStateTransitions[stateName][alphabetElement];
+                        newStateHelper.isFinal = false;
+                        foreach (string state in primaryStateTransitions[stateName][alphabetElement])
+                        {
+                            if (statesClasification[state] == 2)
+                            {
+                                newStateHelper.isFinal = true;
+                            }
+                        }
+                        qPendingStates.Enqueue(newStateHelper);
+                    }
+                }
+            }
+            insertData(qPendingStates);
+        }
+
+        private void insertData(Queue<NewStateHelper> pendingStates)
+        {
+            finalTable.Columns.Add("Estado", typeof(string));
+            int i = 0, actualRow = 0;
+            while (i < alphabet.Length)
+            {
+                finalTable.Columns.Add(alphabet[i], typeof(string));
+                i++;
+            }
+            while (pendingStates.Count > 0)
+            {
+                NewStateHelper temp = pendingStates.Dequeue();
+                foreach (string baseState in temp.baseStates)
+                {
+                    foreach (string alphabetElement in alphabet)
+                    {
+                        string[] temporalTransitionsStates = primaryStateTransitions[baseState][alphabetElement];
+                        string newTransition = "";
+                        foreach (string item in temporalTransitionsStates)
+                        {
+                            if (newTransition.IndexOf(item) == -1)
+                            {
+                                newTransition += item;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    public class NewStateHelper
+    {
+        public string Name { get; set; }
+        public string[] baseStates { get; set; }
+        public bool isFinal { get; set; }
+    }
+
+    //public class Transtition
+    //{
+    //    public string Name { get; set; }
+    //    public string[] Transitions { get; set; }
+    //}
+
+    //public class NewState
+    //{
+    //    public string Name { get; set; }
+    //    public Transition[] MyProperty { get; set; }
+    //}
 }

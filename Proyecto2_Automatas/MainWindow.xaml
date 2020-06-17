@@ -55,9 +55,12 @@
             <TextBox x:Name="txtFinalStates"/>
             <TextBlock FontSize="10" Text="Separe por comas. Ej: a,b,c"/>
         </StackPanel>
-        <Button Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="2" Margin="0 12" Content="Generar tabla" FontSize="10"
+        <Button Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Margin="0 12" Content="Generar tabla" FontSize="10"
                 Click="Generate_Click"/>
-        <DataGrid x:Name="InitialDataGrid" Grid.Row="1" Grid.RowSpan="6" Grid.Column="6" Grid.ColumnSpan="7" CanUserAddRows="False" />
-
+        <TextBlock Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="5" VerticalAlignment="Bottom" Text="Agregar las transiciones  separado por comas."/>
+        <DataGrid x:Name="InitialDataGrid" Grid.Row="1" Grid.RowSpan="4" Grid.Column="5" Grid.ColumnSpan="4" CanUserAddRows="False" />
+        <Button Grid.Row="5" Grid.Column="7" Grid.ColumnSpan="2" Margin="0 12" Content="Generar AFD" FontSize="10"
+                Click="GenerateAfd_Click"/>
+        <DataGrid x:Name="FinalDataGrid" Grid.Row="1" Grid.RowSpan="4" Grid.Column="10" Grid.ColumnSpan="4" CanUserAddRows="False" />
     </Grid>
 </Window>
