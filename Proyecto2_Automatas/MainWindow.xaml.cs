@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -32,7 +33,7 @@ namespace Proyecto2_Automatas
         Queue<string> qInitialStates;
         Queue<NewStateHelper> qPendingStates;
         Queue<NewStateHelper> qGeneratedStates;
-        NewState[] AFD;
+        ArrayList AFD;
 
         public MainWindow()
         {
@@ -168,7 +169,11 @@ namespace Proyecto2_Automatas
             // Encolamos los estados que se generan a partir de la data inicial
             setPendingStates();
 
+            // Genera el AFD equivalente
             generateAFD( );
+
+            // Genera la tabla
+            generateAFDGrid();
         }
 
         private void getAFNDData( )
@@ -185,7 +190,7 @@ namespace Proyecto2_Automatas
                     string tempStr = initTable.Rows[i].Field<string>(j + 1);
                     if (tempStr == null)
                     {
-                        tempStr = "-";
+                        tempStr = "";
                     }
                     string[] tempStrSplit = tempStr.Split(',');
                     string[] tempTransitions = new string[tempStrSplit.Length];
@@ -231,15 +236,7 @@ namespace Proyecto2_Automatas
         }
         private void generateAFD( )
         {
-            // Insertamos columnas ----------------------------------------
-            finalTable.Columns.Add("Estado", typeof(string));
-            int i = 0, actualRow = 0;
-            while (i < alphabet.Length)
-            {
-                finalTable.Columns.Add(alphabet[i], typeof(string));
-                i++;
-            }
-            // ------------------------------------------------------------
+            AFD = new ArrayList();
 
             while (qPendingStates.Count > 0)
             {
@@ -250,12 +247,78 @@ namespace Proyecto2_Automatas
                 }
             }
 
+        }
 
+        public void generateAFDGrid( )
+        {
+            // Se inicializa la tabla
+            finalTable = new DataTable();
 
+            // Insertamos columnas ----------------------------------------
+            finalTable.Columns.Add("Estado", typeof(string));
+            int i = 0;
+            while (i < alphabet.Length)
+            {
+                finalTable.Columns.Add(alphabet[i], typeof(string));
+                i++;
+            }
+            // ------------------------------------------------------------
 
+            // Estado inicial ------------------------------
+            DataRow initialRow;
+            string firstStateName = state[0];
+            initialRow = finalTable.NewRow();
 
+            initialRow["Estado"] = "->" + firstStateName;
 
+            foreach (string alphElem in alphabet)
+            {
+                initialRow[alphElem] = String.Join("", primaryStateTransitions[firstStateName][alphElem]);
+            }
 
+            finalTable.Rows.Add(initialRow);
+            // ---------------------------------------------------
+
+            destroyInnecessaryStates( );
+
+            // Inserta nuevos estados
+            foreach (NewState newState in AFD)
+            {
+                DataRow tableRow;
+                tableRow = finalTable.NewRow();
+
+                tableRow["Estado"] = (newState.isFinal ? "*" : "") + newState.Name;
+
+                foreach(string alphElem in alphabet)
+                {
+                    tableRow[alphElem] = newState.transitions[alphElem];
+                }
+
+                finalTable.Rows.Add(tableRow);
+            }
+
+            FinalDataGrid.ItemsSource = finalTable.DefaultView;
+        }
+
+        private void destroyInnecessaryStates()
+        {
+            ArrayList statesToDestroy = new ArrayList();
+            foreach(NewState finalState in AFD)
+            {
+                foreach(string alphElem in alphabet)
+                {
+                    Dictionary<string, string[]> dummyVal = new Dictionary<string, string[]>();
+                    if(primaryStateTransitions.TryGetValue(finalState.transitions[alphElem], out dummyVal))
+                    {
+                        if(statesClasification[finalState.transitions[alphElem]] != 1) statesToDestroy.Add(finalState);
+                    }
+                }
+            }
+
+            foreach(NewState stateToDestroy in statesToDestroy)
+            {
+                AFD.Remove(stateToDestroy);
+            }
         }
 
         public void generateStateTransitions(NewStateHelper newState)
@@ -266,53 +329,73 @@ namespace Proyecto2_Automatas
             tempState.baseStates = newState.baseStates;
             tempState.baseStatesAsDict = newState.baseStatesAsDict;
             tempState.transitions = new Dictionary<string, string>();
+            tempState.isFinal = false;
 
             for (int i = 0; i < alphabet.Length; i++)
             {
                 NewStateHelper possibleNewState = new NewStateHelper();
                 string alphabetElem = alphabet[i];
-                string[] tempTransitions = new string[] { };
-                int transitionIndex = 0;
+                string[] tempTransitions;
+                ArrayList tempTransitionsAl = new ArrayList();
 
                 Dictionary<string, bool> tempTransitionsDict = new Dictionary<string, bool>();
 
                 for (int j = 0; j < newState.baseStates.Length; j++) // Itera sobre las transiciones que generan el nuevo estado
                 {
                     string baseTransitionName = newState.baseStates[j];
-                    string[] baseTransitionTransitions = primaryStateTransitions[baseTransitionName][alphabetElem];
 
-                    for(int k = 0; k < baseTransitionTransitions.Length; k++)
+                    if(baseTransitionName != "")
                     {
-                        string transition = baseTransitionTransitions[k];
-                        bool dummyVal = false;
+                        string[] baseTransitionTransitions = primaryStateTransitions[baseTransitionName][alphabetElem];
 
-                        // Verificar si existe la transición en las transiciones usadas, sino la agregamos a la lista
-                        if(!tempTransitionsDict.TryGetValue(transition, out dummyVal))
+                        // Define si el nuevo estado es final
+                        tempState.isFinal = statesClasification[baseTransitionName] == 2;
+
+                        for (int k = 0; k < baseTransitionTransitions.Length; k++) // Itera sobre las transiciones de una transición dada que genera el nuevo estado
                         {
-                            tempTransitionsDict.Add(transition, true);
-                            tempTransitions[transitionIndex] = transition;
-                            transitionIndex++;
+                            string transition = baseTransitionTransitions[k];
+                            bool dummyVal = false;
+
+                            if(transition != "") // Verifica que la transición no sea un espacio vacío
+                            {
+                                // Verificar si existe la transición en las transiciones usadas, sino la agregamos a la lista
+                                if (!tempTransitionsDict.TryGetValue(transition, out dummyVal))
+                                {
+                                    tempTransitionsDict.Add(transition, true);
+                                    tempTransitionsAl.Add(transition);
+                                }
+                            }
                         }
                     }
+
                 }
 
-                string newStateName = String.Join("", tempTransitions);
-                tempState.transitions.Add(alphabetElem, newStateName);
+                if(tempTransitionsAl.Count != 0)
+                {
+                    tempTransitions = convertArrayListToArray(tempTransitionsAl);
+                    string newStateName = String.Join("", tempTransitions);
+                    tempState.transitions.Add(alphabetElem, newStateName);
 
-                possibleNewState.Name = newStateName;
-                possibleNewState.baseStates = tempTransitions;
-                possibleNewState.baseStatesAsDict = tempTransitionsDict;
+                    possibleNewState.Name = newStateName;
+                    possibleNewState.baseStates = tempTransitions;
+                    possibleNewState.baseStatesAsDict = tempTransitionsDict;
 
-                qPendingStates.Enqueue(possibleNewState);
+                    qPendingStates.Enqueue(possibleNewState);
+                }
             }
 
+            // Se agrega a la cola de estados generados
+            qGeneratedStates.Enqueue(newState);
+
             // Se agrega el nuevo estado a la lista de nuevos estados
-            AFD[AFD.Length] = tempState;
+            AFD.Add(tempState);
         }
 
         private void initMainStates(  )
         {
-            foreach(string stateName in state)
+            qGeneratedStates = new Queue<NewStateHelper>();
+
+            foreach (string stateName in state)
             {
                 NewStateHelper tempState = new NewStateHelper();
                 string[] tempTransitions = new string[] { stateName };
@@ -348,6 +431,21 @@ namespace Proyecto2_Automatas
             }
 
             return false;
+        }
+
+
+        private string[] convertArrayListToArray(ArrayList arrayList)
+        {
+            string[] newArray = new string[arrayList.Count];
+            int i = 0;
+
+            foreach(string item in arrayList)
+            {
+                newArray[i] = item;
+                i++;
+            }
+
+            return newArray;
         }
     }
 

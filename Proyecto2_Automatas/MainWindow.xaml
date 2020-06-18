@@ -57,7 +57,8 @@
         </StackPanel>
         <Button Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Margin="0 12" Content="Generar tabla" FontSize="10"
                 Click="Generate_Click"/>
-        <TextBlock Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="5" VerticalAlignment="Bottom" Text="Agregar las transiciones  separado por comas."/>
+        <TextBlock Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="5" VerticalAlignment="Center" Text="Agregar las transiciones separado por comas."/>
+        <TextBlock Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="5" VerticalAlignment="Bottom" Text="Dejar en blanco si no se va a agregar transición."/>
         <DataGrid x:Name="InitialDataGrid" Grid.Row="1" Grid.RowSpan="4" Grid.Column="5" Grid.ColumnSpan="4" CanUserAddRows="False" />
         <Button Grid.Row="5" Grid.Column="7" Grid.ColumnSpan="2" Margin="0 12" Content="Generar AFD" FontSize="10"
                 Click="GenerateAfd_Click"/>
